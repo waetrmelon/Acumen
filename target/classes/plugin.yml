@@ -1,0 +1,4 @@
+name: Acumen
+version: '1.0-SNAPSHOT'
+main: org.waetrmelon.acumen.Acumen
+api-version: '1.21'

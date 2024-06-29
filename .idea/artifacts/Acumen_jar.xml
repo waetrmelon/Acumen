@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Acumen:jar">
+    <output-path>$USER_HOME$/Desktop/Acumen Server/plugins</output-path>
+    <root id="archive" name="Acumen.jar">
+      <element id="module-output" name="Acumen" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/Acumen Server/Server.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

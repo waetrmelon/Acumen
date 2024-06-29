@@ -1,0 +1,4 @@
+name: Acumen
+version: '${project.version}'
+main: org.waetrmelon.acumen.Acumen
+api-version: '1.21'
