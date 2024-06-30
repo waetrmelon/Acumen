@@ -49,7 +49,7 @@ public final class Acumen extends JavaPlugin implements Listener {
         PreviousSpeed.put(player, CurrentSpeed.get(player));
         PreviousSliperiness.put(player, CurrentSliperiness.get(player));
 
-        CurrentSpeed.put(player, MovementSimulation.CalculateGroundVelocity(player));
+        CurrentSpeed.put(player, MovementSimulation.CalculateGroundVelocityX(player));
         CurrentSliperiness.put(player, MovementSimulation.CalculateSlipperinessMultiplier(player));
 
         MovementSimulation.SimulateMovement(player);

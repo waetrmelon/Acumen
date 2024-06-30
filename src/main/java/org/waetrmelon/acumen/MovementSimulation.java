@@ -66,15 +66,24 @@ public class MovementSimulation {
 
     }
 
-    public static float CalculateGroundVelocity(Player player){
+    public static float CalculateGroundVelocityX(Player player){
         float Mt = GetMovementStateMultiplier(player);
         float Et = CalculateEffectMultiplier(player);
         float St = Acumen.CurrentSliperiness.get(player);
         float pSt = Acumen.PreviousSliperiness.get(player);
         float pV = Acumen.PreviousSpeed.get(player);
-        float Dt = (player.getLocation().getYaw() - 90) % 360; // Direction
-        float vHt = (float) ((float) ((pV * pSt * 0.91) + (0.1 * Mt * Math.pow((0.6/St),3))) * Math.sin(Dt));
-        return vHt;
+        float Dt = player.getLocation().getYaw() * (float)Math.PI / 180.0F; // Direction
+        return (float) ((float) ((pV * pSt * 0.91) + (0.1 * Mt * Et * Math.pow((0.6/St),3))) * Math.sin(Dt));
+    }
+
+    public static float CalculateGroundVelocityZ(Player player){
+        float Mt = GetMovementStateMultiplier(player);
+        float Et = CalculateEffectMultiplier(player);
+        float St = Acumen.CurrentSliperiness.get(player);
+        float pSt = Acumen.PreviousSliperiness.get(player);
+        float pV = Acumen.PreviousSpeed.get(player);
+        float Dt = player.getLocation().getYaw() * (float)Math.PI / 180.0F; // Direction
+        return (float) ((float) ((pV * pSt * 0.91) + (0.1 * Mt * Et *  Math.pow((0.6/St),3))) * Math.cos(Dt));
     }
 
     public static void SimulateMovement(Player player) {
@@ -86,16 +95,28 @@ public class MovementSimulation {
         //Bukkit.broadcastMessage("Mt: " + Mt);
         //Bukkit.broadcastMessage("Et: " + Et);
         //Bukkit.broadcastMessage("St: " + St);
-        float CurrentSpeed = Acumen.CurrentSpeed.get(player);
-        DecimalFormat df = new DecimalFormat("#.0000");
-        String value = df.format(CurrentSpeed);
-        //Bukkit.broadcastMessage("Estimated " + value);
-        //Bukkit.broadcastMessage("Real: " + player.getVelocity().getX());
-        float Difference = (float) Math.abs(player.getVelocity().getX() - CurrentSpeed);
-        //Bukkit.broadcastMessage("% Difference: " + Difference);
+        Material BlockUnder = player.getLocation().subtract(0, 1, 0).getBlock().getType();
 
-        if (Difference > 0.2) {
-            Bukkit.broadcastMessage("FLAG!!!!!!");
+        if (!(BlockUnder.equals(Material.AIR))){
+            DecimalFormat Format = new DecimalFormat("#.0000");
+            float PredictedX = Acumen.CurrentSpeed.get(player);
+            String PredictedXValue = Format.format(PredictedX);
+
+            float PredictedZ = Acumen.CurrentSpeed.get(player);
+            String PredictedZValue = Format.format(PredictedZ);
+
+            float DifferenceX = (float) Math.abs(player.getVelocity().getX() - PredictedX);
+            Bukkit.broadcastMessage("% Difference (X): " + DifferenceX);
+
+            float DifferenceZ = (float) Math.abs(player.getVelocity().getZ() - PredictedZ);
+            Bukkit.broadcastMessage("% Difference (Z): " + DifferenceZ);
+
+            if (DifferenceX > 0.5) {
+                Bukkit.broadcastMessage("§4Acumen §7>> §f" + player.getName() + " §cFailed §f(X Velo) §aDiff§7:§f" + DifferenceX);
+            }
+            if (DifferenceZ > 0.5) {
+                Bukkit.broadcastMessage("§4Acumen §7>> §f" + player.getName() + " §cFailed §f(Z Velo) §aDiff§7:§f" + DifferenceZ);
+            }
         }
 
     }
